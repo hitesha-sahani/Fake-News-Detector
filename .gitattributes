@@ -1,1 +1,6 @@
 *.pkl filter=lfs diff=lfs merge=lfs -text
+app/* linguist-vendored
+components/* linguist-vendored
+hooks/* linguist-vendored
+lib/* linguist-vendored
+styles/* linguist-vendored
