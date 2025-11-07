@@ -1,6 +1,13 @@
 *.pkl filter=lfs diff=lfs merge=lfs -text
-app/* linguist-vendored
-components/* linguist-vendored
-hooks/* linguist-vendored
-lib/* linguist-vendored
-styles/* linguist-vendored
+
+# Ignore all frontend TypeScript files
+*.ts linguist-vendored
+*.tsx linguist-vendored
+
+# Ignore typical Next.js folders
+app/** linguist-vendored
+components/** linguist-vendored
+hooks/** linguist-vendored
+lib/** linguist-vendored
+styles/** linguist-vendored
+public/** linguist-vendored
