@@ -1,213 +1,231 @@
+```markdown
 # Fake News Detection Web App
 
-An AI-powered web application that analyzes news articles to determine their credibility - whether they are real or fake news.
+An AI-powered web application that analyzes news articles and determines whether they are **Real** or **Fake**, along with confidence scores, reasoning, and visual charts.  
+Built using **Next.js + TypeScript** (frontend/API) and **Python + scikit-learn** (ML model).
 
-## Features
+---
 
-- **Real-time Analysis**: Submit any news text and get instant credibility assessment
-- **Confidence Scores**: See detailed confidence percentages for real vs fake classification
-- **Detailed Reasoning**: Understand why a piece of news was classified as real or fake
-- **Beautiful UI**: Modern, responsive interface with dark mode support
-- **Machine Learning Model**: Trained on the `bharatfakenewskosh.xlsx` dataset
+## ✅ Features
 
-## Project Structure
+- **Real-time Fake News Detection**
+- **Confidence Breakdown (Real vs Fake %)**
+- **Explainability / Reasoning**
+- **Interactive Charts using Recharts**
+- **Beautiful UI with Tailwind + shadcn/ui**
+- **ML model trained on Bharat Fake News Kosh dataset**
 
-\`\`\`
+---
+
+## ✅ Project Structure
+
+```
+
 ├── app/
-│   ├── page.tsx                 # Main home page
-│   ├── layout.tsx               # Root layout
-│   ├── globals.css              # Global styles
+│   ├── page.tsx                  # Home page UI
+│   ├── layout.tsx                # Root layout
+│   ├── globals.css               # Global styles
 │   └── api/
-│       ├── predict/route.ts     # News prediction endpoint
-│       └── train/route.ts       # Model training endpoint
+│       ├── predict/route.ts      # API endpoint for predictions
+│       └── train/route.ts        # API endpoint for training
 ├── components/
-│   ├── news-analyzer.tsx        # Main analyzer component
-│   ├── confidence-chart.tsx     # Confidence visualization
-│   └── ui/                      # shadcn/ui components
+│   ├── news-analyzer.tsx         # Main analyzer component
+│   ├── confidence-chart.tsx      # Visualization component
+│   └── ui/                       # shadcn/ui components
 ├── scripts/
-│   ├── train_model.py           # Model training pipeline
-│   └── predict_news.py          # Test prediction script
-├── public/
-│   └── ml_models/               # Trained model storage
-│       ├── fake_news_model.pkl
-│       ├── tfidf_vectorizer.pkl
-│       └── model_metadata.pkl
-└── bharatfakenewskosh.xlsx      # Training dataset (add to root)
-\`\`\`
+│   ├── train_model.py            # ML training pipeline
+│   └── predict_news.py           # Local prediction tester
+├── public/ml_models/
+│   ├── fake_news_model.pkl
+│   ├── tfidf_vectorizer.pkl
+│   └── model_metadata.pkl
+└── bharatfakenewskosh.xlsx       # Dataset (add manually)
 
-## Setup Instructions
+````
 
-### 1. Install Dependencies
+---
 
-\`\`\`bash
+## ✅ Installation
+
+### **1. Install Node.js dependencies**
+```bash
 npm install
-\`\`\`
+````
 
-Make sure you have Python 3.7+ installed with required packages:
-\`\`\`bash
+### **2. Install Python dependencies**
+
+```bash
 pip install pandas openpyxl scikit-learn numpy
-\`\`\`
+```
 
-### 2. Prepare Training Data
+---
 
-Place your `bharatfakenewskosh.xlsx` file in the project root directory. The file should have:
-- A text/content column (news articles)
-- A label column (real/fake classification)
+## ✅ Add Training Dataset
 
-The script will auto-detect column names like: `text`, `news`, `content`, `title`, `label`, `class`, `real`, `fake`
+Place your dataset:
 
-### 3. Train the Model
+```
+bharatfakenewskosh.xlsx
+```
 
-**Option A: Using the API**
-\`\`\`bash
+into the **project root folder**.
+
+It must contain:
+
+* A text/content column
+* A label/class column
+
+The script auto-detects common names like:
+`text, content, news, title, label, class, real, fake`
+
+---
+
+## ✅ Training the Model
+
+### **Option A — Train through API**
+
+```bash
 curl -X POST http://localhost:3000/api/train
-\`\`\`
+```
 
-**Option B: Run Python script directly**
-\`\`\`bash
+### **Option B — Train using Python**
+
+```bash
 python scripts/train_model.py
-\`\`\`
+```
 
-The trained model will be saved to `public/ml_models/`:
-- `fake_news_model.pkl` - Trained LogisticRegression model
-- `tfidf_vectorizer.pkl` - TF-IDF vectorizer
-- `model_metadata.pkl` - Model metadata and metrics
+This will generate:
 
-### 4. Run the App
+* `fake_news_model.pkl`
+* `tfidf_vectorizer.pkl`
+* `model_metadata.pkl`
 
-\`\`\`bash
+stored in `public/ml_models/`.
+
+---
+
+## ✅ Running the App
+
+```bash
 npm run dev
-\`\`\`
+```
 
-Visit `http://localhost:3000` to access the web app.
+Open:
 
-## How It Works
+👉 [http://localhost:3000](http://localhost:3000)
 
-### Training Pipeline (`scripts/train_model.py`)
+---
 
-1. **Load Data**: Reads `bharatfakenewskosh.xlsx`
-2. **Preprocessing**: Cleans text, handles missing values
-3. **Feature Extraction**: Uses TF-IDF vectorization
-   - Max features: 5000
-   - N-grams: 1-2
-   - Removes English stop words
-4. **Model Training**: LogisticRegression classifier
-   - Train/Test split: 80/20
-5. **Evaluation**: Calculates accuracy, precision, recall, F1-score
-6. **Save Artifacts**: Stores model, vectorizer, and metadata
+## ✅ How the System Works
 
-### Prediction API (`app/api/predict/route.ts`)
+### 🔹 **Training Pipeline (Python)**
 
-Accepts POST requests with news text:
+1. Load dataset
+2. Clean and preprocess text
+3. Vectorize using **TF-IDF (1–2 n-grams, 5000 features)**
+4. Train **LogisticRegression** ML model
+5. Evaluate using accuracy, precision, recall, F1-score
+6. Save model + metadata
 
-\`\`\`json
+---
+
+### 🔹 **Prediction API (Next.js Route Handler)**
+
+Send:
+
+```json
 {
   "news_text": "Your news article text here..."
 }
-\`\`\`
+```
 
-Returns:
+Receive:
 
-\`\`\`json
+```json
 {
   "prediction": "Real",
-  "prediction_index": 1,
   "confidence": {
     "Real": 0.87,
     "Fake": 0.13
   },
-  "is_real": true,
   "confidence_percentage": 87,
   "model_accuracy": 0.85,
-  "analysis_reason": "Contains well-structured content; ...",
+  "analysis_reason": "Contains well-structured content...",
   "status": "success"
 }
-\`\`\`
+```
 
-## Technical Stack
+---
 
-- **Frontend**: Next.js 16, React, TypeScript, Tailwind CSS
-- **Backend**: Next.js API Routes
-- **ML/AI**: scikit-learn, TF-IDF, LogisticRegression
-- **Data Processing**: pandas, openpyxl
-- **Visualization**: Recharts
-- **UI Components**: shadcn/ui
+## ✅ Tech Stack
 
-## Model Details
+### **Frontend & API**
 
-- **Algorithm**: LogisticRegression with TF-IDF Vectorizer
-- **Features**: 5000 TF-IDF features with 1-2 n-grams
-- **Training Data**: bharatfakenewskosh.xlsx dataset
-- **Evaluation**: 80/20 train/test split
-- **Metrics**: Accuracy, Precision, Recall, F1-Score
+* Next.js 16
+* React
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
 
-## Usage Example
+### **Machine Learning**
 
-1. Go to the web app homepage
-2. Paste news text in the textarea (minimum 10 characters)
-3. Click "Analyze News"
-4. View the results:
-   - Real/Fake prediction
-   - Confidence percentage
-   - Detailed analysis reasons
-   - Visual confidence chart
+* scikit-learn
+* TF-IDF Vectorizer
+* LogisticRegression
+* pandas / numpy
 
-## Testing
+---
 
-You can test the API using curl:
+## ✅ Performance Notes
 
-\`\`\`bash
-# Test prediction
-curl -X POST http://localhost:3000/api/predict \
-  -H "Content-Type: application/json" \
-  -d '{"news_text": "Breaking news: Scientists discover new renewable energy source..."}'
-\`\`\`
+* First prediction loads model → may take 1–2s
+* Next predictions → **fast (<100ms)**
+* Model size: 5–10MB
 
-## Environment Variables
+---
 
-Currently, no environment variables are required. The app uses local file storage for models.
+## ✅ Troubleshooting
 
-For production deployment:
-- Consider storing models in cloud storage (AWS S3, GCS, etc.)
-- Add authentication to training endpoint
-- Implement rate limiting for API routes
+### ❗ *Model files not found*
 
-## Performance Considerations
+* Run training script again
+* Ensure `public/ml_models/` exists
 
-- **First Prediction**: May take a few seconds as model loads from disk
-- **Subsequent Predictions**: Very fast (< 100ms)
-- **Model Size**: ~5-10MB depending on feature size
+### ❗ *Python script issues*
 
-## Troubleshooting
+* Install dependencies
+* Check dataset file path
+* Ensure Python 3.7+
 
-### "Model files not found"
-- Run the training script first: `python scripts/train_model.py`
-- Check that `public/ml_models/` directory exists
+### ❗ *Column detection errors*
 
-### Python script fails
-- Ensure Python 3.7+ is installed
-- Install required packages: `pip install pandas openpyxl scikit-learn numpy`
-- Check file paths are correct
+Rename dataset columns to:
+`text`, `news`, `content`, `label`, or similar names.
 
-### Column detection fails
-- Ensure your xlsx has clear column names
-- Rename columns to match: `text`, `label` or similar variants
+---
 
-## Future Improvements
+## ✅ Roadmap / Future Improvements
 
-- [ ] Support for multiple languages
-- [ ] Fine-tuning with active learning
-- [ ] Ensemble models combining multiple algorithms
-- [ ] API authentication and rate limiting
-- [ ] Model versioning and A/B testing
-- [ ] User feedback mechanism to improve model
-- [ ] Browser-based model inference (TensorFlow.js)
-- [ ] Advanced NLP features (sentiment, entity extraction)
+* [ ] Support for Hindi & multilingual datasets
+* [ ] Transformer-based models (BERT, DistilBERT)
+* [ ] Active learning loop
+* [ ] API authentication
+* [ ] Cloud hosting for model
+* [ ] Feedback mechanism
+* [ ] Model versioning (A/B testing)
+* [ ] TensorFlow.js browser inference
 
-## License
+---
 
-MIT
+## ✅ License
 
-## Support
+MIT License
 
-For issues or questions, please check the troubleshooting section or create an issue.
+---
+
+## ✅ Support
+
+If you have questions or encounter issues, feel free to open a GitHub issue.
+
+```
+
