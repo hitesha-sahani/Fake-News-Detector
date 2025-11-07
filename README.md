@@ -15,10 +15,6 @@ Built using **Next.js + TypeScript** (frontend/API) and **Python + scikit-learn*
 - **Beautiful UI with Tailwind + shadcn/ui**
 - **ML model trained on Bharat Fake News Kosh dataset**
 
----
-
-## ✅ Project Structure
-
 ```
 
 ├── app/
@@ -35,13 +31,12 @@ Built using **Next.js + TypeScript** (frontend/API) and **Python + scikit-learn*
 ├── scripts/
 │   ├── train_model.py            # ML training pipeline
 │   └── predict_news.py           # Local prediction tester
-├── public/ml_models/
-│   ├── fake_news_model.pkl
-│   ├── tfidf_vectorizer.pkl
-│   └── model_metadata.pkl
-└── bharatfakenewskosh.xlsx       # Dataset (add manually)
-
-````
+├── public/
+│   └── ml_models/
+│       ├── fake_news_model.pkl
+│       ├── tfidf_vectorizer.pkl
+│       └── model_metadata.pkl
+└── bharatfakenewskosh.xlsx        # Dataset (add manually)
 
 ---
 
